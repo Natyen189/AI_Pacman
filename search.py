@@ -72,8 +72,7 @@ def tinyMazeSearch(problem):
     from game import Directions
     s = Directions.SOUTH
     w = Directions.WEST
-    return [s, s, w, s, w, w, s, w]
-
+    return  [s, s, w, s, w, w, s, w]
 
 def depthFirstSearch(problem):
     """
@@ -110,18 +109,51 @@ def depthFirstSearch(problem):
 
     util.raiseNotDefined()
 
-
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    from util import Queue
 
+    queue = Queue()
+    queue.push((problem.getStartState(), []))
+    visited = []
+
+    while not queue.isEmpty():
+        temp, path = queue.pop()
+
+        if problem.isGoalState(temp):
+            return path
+
+        if temp not in visited:
+            visited.append(temp)
+            for i in problem.getSuccessors(temp):
+                temp = (i[0], path + [i[1]])
+                queue.push(temp)
+
+    util.raiseNotDefined()
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
 
+    from util import PriorityQueue
+    priorityQueue = PriorityQueue()
+    priorityQueue.push((problem.getStartState(), [], []), [])
+    visited = []
+
+    while not priorityQueue.isEmpty():
+        temp, path, cost = priorityQueue.pop()
+
+        if problem.isGoalState(temp):
+            return path
+
+        if temp not in visited:
+            visited.append(temp)
+            for i in problem.getSuccessors(temp):
+                temp = (i[0], path + [i[1]], cost + [i[2]])
+                priorityQueue.update(temp, cost + [i[2]])
+
+    util.raiseNotDefined()
 
 def nullHeuristic(state, problem=None):
     """
@@ -130,10 +162,27 @@ def nullHeuristic(state, problem=None):
     """
     return 0
 
-
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
+
+    from util import PriorityQueue
+    priorityQueue = PriorityQueue()
+    priorityQueue.push((problem.getStartState(), [], []), [])
+    visited = []
+
+    while not priorityQueue.isEmpty():
+        temp, path, cost = priorityQueue.pop()
+
+        if problem.isGoalState(temp):
+            return path
+
+        if temp not in visited:
+            visited.append(temp)
+            for i in problem.getSuccessors(temp):
+                temp = (i[0], path + [i[1]], cost + [i[2]])
+                priorityQueue.update(temp, cost + [heuristic([i[0]], problem)])
+
     util.raiseNotDefined()
 
 

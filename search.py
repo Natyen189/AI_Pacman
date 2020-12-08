@@ -4,7 +4,7 @@
 # educational purposes provided that (1) you do not distribute or publish
 # solutions, (2) you retain this notice, and (3) you provide clear
 # attribution to UC Berkeley, including a link to http://ai.berkeley.edu.
-# 
+#
 # Attribution Information: The Pacman AI projects were developed at UC Berkeley.
 # The core projects and autograders were primarily created by John DeNero
 # (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
@@ -138,7 +138,7 @@ def uniformCostSearch(problem):
 
     from util import PriorityQueue
     priorityQueue = PriorityQueue()
-    priorityQueue.push((problem.getStartState(), [], []), [])
+    priorityQueue.push((problem.getStartState(), [], 0), 0)
     visited = []
 
     while not priorityQueue.isEmpty():
@@ -150,8 +150,8 @@ def uniformCostSearch(problem):
         if temp not in visited:
             visited.append(temp)
             for i in problem.getSuccessors(temp):
-                temp = (i[0], path + [i[1]], cost + [i[2]])
-                priorityQueue.update(temp, cost + [i[2]])
+                temp = (i[0], path + [i[1]], cost + i[2])
+                priorityQueue.update(temp, cost + i[2])
 
     util.raiseNotDefined()
 
@@ -168,7 +168,7 @@ def aStarSearch(problem, heuristic=nullHeuristic):
 
     from util import PriorityQueue
     priorityQueue = PriorityQueue()
-    priorityQueue.push((problem.getStartState(), [], []), [])
+    priorityQueue.push((problem.getStartState(), [], 0), 0)
     visited = []
 
     while not priorityQueue.isEmpty():
@@ -180,8 +180,8 @@ def aStarSearch(problem, heuristic=nullHeuristic):
         if temp not in visited:
             visited.append(temp)
             for i in problem.getSuccessors(temp):
-                temp = (i[0], path + [i[1]], cost + [i[2]])
-                priorityQueue.update(temp, cost + [heuristic([i[0]], problem)])
+                temp = (i[0], path + [i[1]], cost + i[2])
+                priorityQueue.update(temp, cost + i[2] + heuristic(i[0], problem))
 
     util.raiseNotDefined()
 
